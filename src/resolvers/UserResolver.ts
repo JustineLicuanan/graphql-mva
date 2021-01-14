@@ -73,10 +73,14 @@ export class UserResolver {
 	@Mutation(() => Boolean)
 	async updateUser(@Arg('args', () => UpdateUserArgs) args: UpdateUserArgs) {
 		if (args.password) args.password = await bcryptHash(args.password, 10);
-		const { affected } = await User.update(args.id, {
+		const userUpdates = {
 			...(!!args.email && { email: args.email }),
 			...(!!args.password && { password: args.password }),
-		});
+		};
+		if (!Object.keys(userUpdates).length)
+			throw new Error('Update values must have at least one');
+
+		const { affected } = await User.update(args.id, userUpdates);
 		if (!affected) throw new Error('User not found');
 		return true;
 	}
