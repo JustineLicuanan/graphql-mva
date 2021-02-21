@@ -26,6 +26,8 @@
 	"scripts": {
 		"rm:dist": "rm -rf dist",
 		"dev": "nodemon src/index.ts",
+		"commit": "git add . && git commit -m",
+		"origin": "git push origin master",
 		"build": "yarn rm:dist && tsc",
 		"start": "node dist/index"
 	}
